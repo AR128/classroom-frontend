@@ -22,7 +22,7 @@ const UploadWidget = ({
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const intializeWidget = () => {
+    const initializeWidget = () => {
       if (!window.cloudinary || widgetRef.current) return false;
       widgetRef.current = window.cloudinary.createUploadWidget(
         {
@@ -34,6 +34,10 @@ const UploadWidget = ({
           clientAllowedFormats: ["png", "jpg", "jpeg", "webp"],
         },
         (error, result) => {
+          if (error) {
+            console.error("Upload failed:", error);
+            return;
+          }
           if (!error && result.event === "success") {
             const payload: UploadWidgetValue = {
               url: result.info.secure_url,
@@ -47,9 +51,9 @@ const UploadWidget = ({
       return true;
     };
 
-    if (intializeWidget()) return;
+    if (initializeWidget()) return;
     const intervalId = window.setInterval(() => {
-      if (intializeWidget()) {
+      if (initializeWidget()) {
         window.clearInterval(intervalId);
       }
     }, 500);
@@ -83,7 +87,7 @@ const UploadWidget = ({
             <UploadCloud className="icon" />
             <div>
               <p>Click to upload photo</p>
-              <p>PNG, JPG, WEBP upto 5 MB</p>
+              <p>PNG, JPG, WEBP up to 5 MB</p>
             </div>
           </div>
         </div>

@@ -85,7 +85,15 @@ const Create = () => {
 
   const bannerPublicId = form.watch("bannerCldPubId");
 
-  const setBannerImage = (file: any, field: any) => {
+  interface UploadedFile {
+    url: string;
+    publicId: string;
+  }
+
+  const setBannerImage = (
+    file: UploadedFile | null,
+    field: { onChange: (value: string) => void },
+  ) => {
     if (file) {
       field.onChange(file.url);
       form.setValue("bannerCldPubId", file.publicId, {
@@ -145,7 +153,7 @@ const Create = () => {
                                   }
                                 : null
                             }
-                            onChange={(file: any) =>
+                            onChange={(file: UploadedFile | null) =>
                               setBannerImage(file, field)
                             }
                           />
